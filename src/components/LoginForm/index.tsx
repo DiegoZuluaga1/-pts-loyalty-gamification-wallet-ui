@@ -26,7 +26,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setUser }) => {
 
   const logIn = async (email: String) => {
     if (email) {
-      const url = "http://localhost:8080/users/login";
+      const url = "https://ancient-inlet-28196.herokuapp.com/users/login";
       const response = await fetch(url, {
         method: "POST",
         body: JSON.stringify({ email }),
@@ -43,7 +43,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setUser }) => {
 
   const signUp = async (name: String, email: String) => {
     if (email) {
-      const url = "http://localhost:8080/users/";
+      const url = "https://ancient-inlet-28196.herokuapp.com/users/";
       const response = await fetch(url, {
         method: "POST",
         body: JSON.stringify({ name, email }),
