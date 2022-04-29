@@ -41,6 +41,8 @@ const GameContainer = styled.div`
 function App() {
   const [user, setUser] = useState<any>();
 
+  console.log(JSON.stringify(user));
+
   return (
     <Container>
       {!user ? (
@@ -77,19 +79,24 @@ function App() {
               Games Available:
             </Typography>
             <GameContainer>
-              <GameCard
-                iconUrl={GameA}
-                name={"Blackjack"}
-                currencyAmount={1000}
-                link=""
-              />
-
-              <GameCard
-                iconUrl={GameB}
-                name={"Solitaire"}
-                currencyAmount={4000}
-                link=""
-              />
+              <a href={`https://incredible-daifuku-590c5b.netlify.app/?session=${user._id}`}>
+                <GameCard
+                  iconUrl={GameA}
+                  name={"Blackjack"}
+                  currencyAmount={1000}
+                  link=""
+                />
+              </a>
+              
+              <a href={`https://inspiring-cobbler-81eda0.netlify.app/?session=${user._id}`}>
+                <GameCard
+                  iconUrl={GameB}
+                  name={"Solitaire"}
+                  currencyAmount={4000}
+                  link=""
+                />
+              </a>
+              
             </GameContainer>
           </div>
         </SummaryContainer>
