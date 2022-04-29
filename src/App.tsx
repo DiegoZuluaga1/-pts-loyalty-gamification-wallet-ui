@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Typography } from "@mui/material";
 import styled from "styled-components";
@@ -40,8 +40,37 @@ const GameContainer = styled.div`
 
 function App() {
   const [user, setUser] = useState<any>();
+  const [lpCurrencies, setLpCurrencies] = useState<any[]>([]);
+  const [gameCurrencies, setGameCurrencies] = useState<any[]>([]);
 
-  console.log(JSON.stringify(user));
+  useEffect(() => {
+    if (user) {
+      let lps: any[] = [];
+      let games: any[] = [];
+
+      user.balances.forEach((balanceItem: any) => {
+        const { target, balance, targetType } = balanceItem;
+
+        if (targetType === "Game") {
+          const { name, currencyName } = target;
+          games.push({
+            name,
+            currencyName,
+            balance,
+          });
+        } else {
+          const { name } = target;
+          lps.push({
+            name,
+            balance,
+          });
+        }
+      });
+
+      setLpCurrencies(lps);
+      setGameCurrencies(games);
+    }
+  }, [user]);
 
   return (
     <Container>
@@ -55,23 +84,16 @@ function App() {
               Currencies:
             </Typography>
             <CurrencyContainer>
-              <CurrencyCard
-                imageUrl={currencyA}
-                currencyName={"Currency A"}
-                currencyAmount={user?.points?.currencyA || 1000}
-              />
-
-              <CurrencyCard
-                imageUrl={currencyB}
-                currencyName={"Currency B"}
-                currencyAmount={user?.points?.currencyB || 2000}
-              />
-
-              <CurrencyCard
-                imageUrl={currencyC}
-                currencyName={"Currency C"}
-                currencyAmount={user?.points?.currencyC || 4500}
-              />
+              {lpCurrencies.map((entry) => {
+                const { name, balance } = entry;
+                return (
+                  <CurrencyCard
+                    imageUrl={currencyC}
+                    currencyName={name}
+                    currencyAmount={balance || 1000}
+                  />
+                );
+              })}
             </CurrencyContainer>
           </div>
           <div>
@@ -79,24 +101,27 @@ function App() {
               Games Available:
             </Typography>
             <GameContainer>
-              <a href={`https://incredible-daifuku-590c5b.netlify.app/?session=${user._id}`}>
+              <a
+                href={`https://incredible-daifuku-590c5b.netlify.app/?session=${user._id}`}
+              >
                 <GameCard
                   iconUrl={GameA}
                   name={"Blackjack"}
-                  currencyAmount={1000}
+                  currencyAmount={gameCurrencies[1]?.balance}
                   link=""
                 />
               </a>
-              
-              <a href={`https://inspiring-cobbler-81eda0.netlify.app/?session=${user._id}`}>
+
+              <a
+                href={`https://inspiring-cobbler-81eda0.netlify.app/?session=${user._id}`}
+              >
                 <GameCard
                   iconUrl={GameB}
                   name={"Solitaire"}
-                  currencyAmount={4000}
+                  currencyAmount={gameCurrencies[0]?.balance}
                   link=""
                 />
               </a>
-              
             </GameContainer>
           </div>
         </SummaryContainer>
